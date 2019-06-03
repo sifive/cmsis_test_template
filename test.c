@@ -14,15 +14,20 @@ int main(int argc, char **argv) {
 #ifdef CMSIS_TEST_GEN_DATA
   GET_TEST_DATA(int32_t, result_scalar) = test_scalar();
 #else
-  int32_t result_vector = test_vector();
-  if (result_vector == GET_TEST_DATA(int32_t, result_scalar)) {
+
+#ifdef CMSIS_TEST_VECTOR
+  int32_t result_user = test_vector();
+#else
+  int32_t result_user = test_scalar();
+#endif  //CMSIS_TEST_VECTOR
+
+#ifdef CMSIS_TEST_COMPARE
+  if (result_user == GET_TEST_DATA(int32_t, result_scalar)) {
     printf("pass\n");
   } else {
     printf("failed\n");
   }
-#endif
-
-  // test_data = 10;
-
+#endif  // CMSIS_TEST_COMPARE
+#endif  // CMSIS_TEST_GEN_DATA
   return 0;
 }
